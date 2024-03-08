@@ -19,6 +19,8 @@ public class SecurityConfigurations {
         http.csrf()
                 .disable()
                 .authorizeHttpRequests()
+                .requestMatchers("/addLanguageList","/addLanguage")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

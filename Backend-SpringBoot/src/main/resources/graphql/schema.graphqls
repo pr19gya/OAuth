@@ -1,0 +1,30 @@
+type Language {
+    languageId: ID!
+    language: String!
+    founder: String!
+    yearFounder: Int!
+    description: String!
+    codeSyntax: String!
+    website: String!
+    pros: [String]!
+    cons: [String]!
+    popularFrameworks: [Framework]!
+}
+
+type Framework {
+    frameworkId: ID!
+    name: String!
+    description: String!
+    popularity: String!
+    learningCurve: String!
+    communitySupport: String!
+    performance: String!
+}
+
+
+
+
+type Query {
+    allLanguages: [Language]!
+    findLanguageById(languageId: ID!): Language
+}
