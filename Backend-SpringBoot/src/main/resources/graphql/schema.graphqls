@@ -1,14 +1,14 @@
 type Language {
     languageId: ID!
-    language: String!
-    founder: String!
-    yearFounder: Int!
-    description: String!
-    codeSyntax: String!
-    website: String!
-    pros: [String]!
-    cons: [String]!
-    popularFrameworks: [Framework]!
+    language: String
+    founder: String
+    yearFounder: Int
+    description: String
+    codeSyntax: String
+    website: String
+    pros: [String]
+    cons: [String]
+    popularFrameworks: [Framework]
 }
 
 type Framework {
