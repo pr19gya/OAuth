@@ -1,25 +1,46 @@
 import React, { useEffect, useState } from "react";
 import { SERVER_URL } from "../constant/Baseurl";
+import axios from "axios";
+import Logout from "./Logout";
 
-function MainPage() {
-    const [info, setInfo] = useState([]);
-
+const MainPage = () => {
+  const [info, setInfo] = useState([]);
 
   const getInfo = async () => {
-    console.log(SERVER_URL);
-    const response = await fetch(SERVER_URL + "/graphql", {
-      method: "POST",
-      redirect: "follow",
-      credentials:"include"
-    }).then((response) => response);
-    console.log(response);
-    if (response.redirected) {
-      document.location = response.url;
+    let data = JSON.stringify({
+      query: `query{
+        allLanguages{
+            languageId,
+            language,
+            codeSyntax
+        }
+    }`,
+      variables: {}
+    });
+    
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: SERVER_URL+'/graphql',
+      withCredentials: true, 
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      data: data
+    };
+    
+    try {
+      const response = await axios.request(config);
+      setInfo(response.data.data.allLanguages); 
+    } catch (error) {
+      console.log(error);
     }
+    
+    
+  }
 
-    const data = await response.json();
-    setInfo(data);
-    console.log(data);
+  const handleLogout = () => {
+    Logout(); // Call the logout function
   };
 
   useEffect(() => {
@@ -28,21 +49,31 @@ function MainPage() {
 
   return (
     <>
-    hello
-        {info && (
-            <table>
-                <tbody>
-                    {info.map((item) => (
-                        <tr key={item.languageId}>
-                            <td>{item.language}</td>   
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        )}
+      
+      <h1>Programming Languages</h1>
+      {info.length > 0 && (
+        <table>
+          <thead>
+            <tr>
+              <th>Language ID</th>
+              <th>Language</th>
+              <th>Code Syntax</th>
+            </tr>
+          </thead>
+          <tbody>
+            {info.map((item) => (
+              <tr key={item.languageId}>
+                <td>{item.languageId}</td>
+                <td>{item.language}</td>
+                <td>{item.codeSyntax || "N/A"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+      <button onClick={handleLogout}>Logout</button>
     </>
-);
-
+  );
 }
 
 export default MainPage;
